@@ -1,5 +1,6 @@
 package com.davigj.sage_brush.core.other;
 
+import com.davigj.sage_brush.core.SBConfig;
 import com.davigj.sage_brush.core.SageBrush;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -30,18 +31,29 @@ public class SBEvents {
     }
 
     @SubscribeEvent
-    public static void entityTick(EntityTickEvent.Post event) {
+    public static void spawnTurts(EntityJoinLevelEvent event) {
         Entity entity = event.getEntity();
-        if (entity instanceof LivingEntity target) {
+        if (entity instanceof LivingEntity living) {
+            if ((living instanceof Turtle && SBConfig.COMMON.scute.get()) ||
+                    (SBConfig.COMMON.torScute.get() && (ModList.get().isLoaded("sullysmod") && SBConstants.isTortoise(living)))) {
+                TrackedDataManager.INSTANCE.setValue(entity, SageBrush.SCUTE_TIMER, living.getRandom().nextInt(SBConfig.COMMON.scuteTimer.get()));
+            }
+        }
+    }
 
-            if (target.getType().is(FEATHERED)) {
-                countDown(target, SageBrush.FEATHER_TIMER);
-            } else if (target.getType().is(WORSE_FEATHERED)) {
-                countDown(target, SageBrush.WORSE_FEATHER_TIMER);
-            }
-            if (target instanceof Turtle) {
-                countDown(target, SageBrush.SCUTE_TIMER);
-            }
+    @SubscribeEvent
+    public static void entityTick(LivingEvent.LivingTickEvent event) {
+        TrackedDataManager manager = TrackedDataManager.INSTANCE;
+        LivingEntity target = event.getEntity();
+
+        if (target.getType().is(FEATHERED)) {
+            countDown(manager, target, SageBrush.FEATHER_TIMER);
+        } else if (target.getType().is(WORSE_FEATHERED)) {
+            countDown(manager, target, SageBrush.WORSE_FEATHER_TIMER);
+        }
+        if ((target instanceof Turtle && SBConfig.COMMON.scute.get()) ||
+                (ModList.get().isLoaded("sullysmod") && SBConstants.isTortoise(target) && SBConfig.COMMON.torScute.get())) {
+            countDown(manager, target, SageBrush.SCUTE_TIMER);
         }
     }
 
@@ -51,6 +63,4 @@ public class SBEvents {
             entity.setData(timerData, timer - 1);
         }
     }
-
-
 }

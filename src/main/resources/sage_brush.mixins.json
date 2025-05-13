@@ -7,6 +7,8 @@
   "mixins": [
     "ArmadilloMixin",
     "BrushItemMixin",
+    "PaintbrushMixin",
+    "TortoiseMixin",
     "TurtleMixin"
   ],
   "client": [

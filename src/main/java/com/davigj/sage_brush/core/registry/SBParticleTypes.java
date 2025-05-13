@@ -1,7 +1,6 @@
 package com.davigj.sage_brush.core.registry;
 
-import com.davigj.sage_brush.client.particle.FeatherParticle;
-import com.davigj.sage_brush.client.particle.GleamParticle;
+import com.davigj.sage_brush.client.particle.*;
 import com.davigj.sage_brush.core.SageBrush;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
@@ -28,6 +27,9 @@ public class SBParticleTypes {
     public static final Supplier<SimpleParticleType> ROADRUNNER_FEATHER = PARTICLE_TYPES.register("roadrunner_feather", () -> new SimpleParticleType(true));
     public static final Supplier<SimpleParticleType> EMU_FEATHER = PARTICLE_TYPES.register("emu_feather", () -> new SimpleParticleType(true));
     public static final Supplier<SimpleParticleType> SHOEBILL_FEATHER = PARTICLE_TYPES.register("shoebill_feather", () -> new SimpleParticleType(true));
+    public static final Supplier<SimpleParticleType> CHERRY_BLOSSOM = PARTICLE_TYPES.register("cherry_blossom", () -> new SimpleParticleType(true));
+    public static final Supplier<SimpleParticleType> SPORE_BLOSSOM = PARTICLE_TYPES.register("spore_blossom", () -> new SimpleParticleType(true));
+    public static final Supplier<SimpleParticleType> YELLOW_BLOSSOM = PARTICLE_TYPES.register("yellow_blossom", () -> new SimpleParticleType(true));
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void registerParticleFactories(RegisterParticleProvidersEvent event) {
@@ -39,5 +41,8 @@ public class SBParticleTypes {
         event.registerSpriteSet(SBParticleTypes.ROADRUNNER_FEATHER.get(), FeatherParticle.Provider::new);
         event.registerSpriteSet(SBParticleTypes.EMU_FEATHER.get(), FeatherParticle.Provider::new);
         event.registerSpriteSet(SBParticleTypes.SHOEBILL_FEATHER.get(), FeatherParticle.Provider::new);
+        event.registerSpriteSet(SBParticleTypes.CHERRY_BLOSSOM.get(), ShrunkBlossomParticle.Provider::new);
+        event.registerSpriteSet(SBParticleTypes.SPORE_BLOSSOM.get(), BlossomParticle.Provider::new);
+        event.registerSpriteSet(SBParticleTypes.YELLOW_BLOSSOM.get(), EnlargedBlossomParticle.Provider::new);
     }
 }

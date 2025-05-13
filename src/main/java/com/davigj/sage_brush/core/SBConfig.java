@@ -17,10 +17,13 @@ public class SBConfig {
         public final ModConfigSpec.ConfigValue<Integer> moltTimer;
         public final ModConfigSpec.ConfigValue<Integer> worseMoltTimer;
         public final ModConfigSpec.ConfigValue<Boolean> removable;
+        public final ModConfigSpec.ConfigValue<Boolean> scutesSpawnSet;
         public final ModConfigSpec.ConfigValue<Boolean> scute;
         public final ModConfigSpec.ConfigValue<Integer> scuteTimer;
         public final ModConfigSpec.ConfigValue<Integer> scuteBabyDrops;
-        public final ModConfigSpec.ConfigValue<Boolean> armadillos;
+        public final ModConfigSpec.ConfigValue<Boolean> torScute;
+        public final ModConfigSpec.ConfigValue<Integer> torScuteTimer;
+        public final ModConfigSpec.ConfigValue<Integer> torScuteBabyDrops;
 
         Common (ModConfigSpec.Builder builder) {
             builder.push("common");
@@ -41,6 +44,10 @@ public class SBConfig {
             scuteTimer = builder.comment("Scute shed cooldown, in ticks. Defaults to ~1 scute every two days.").translation("sage_brush.configuration.scute_drops").define("Scute timer", 48000);
             scuteBabyDrops = builder.comment("Number of scutes dropped by baby turtles when grown, to compensate for brushing adults").translation("sage_brush.configuration.scute_baby_drops").define("Baby turtle scute drops", 3);
             armadillos = builder.comment("Add a cooldown to brushing Armadillos").translation("sage_brush.configuration.armadillos").define("Replace Armadillo interaction", true);
+            scutesSpawnSet = builder.comment("Scute shedders spawn with scute timers that are still ticking down").define("Scute timer spawn set", true);
+            torScute = builder.comment("Adult tortoises from Sully's Mod periodically drop tortoise scutes when brushed").define("Tortoises shed scutes", true);
+            torScuteTimer = builder.comment("Tortoise scute shed cooldown, in ticks. Defaults to ~1 scute every two days.").define("Tortoise scute timer", 48000);
+            torScuteBabyDrops = builder.comment("Number of scutes dropped by baby tortoises when grown, to compensate for brushing adults").define("Baby tortoise scute drops", 3);
             builder.pop();
             builder.push("brush_snags");
             brushSnag = builder.comment("Brushes occasionally provoke mobs that have no resources to shed, causing them to attack or panic").translation("sage_brush.configuration.brush_snags").define("Brushes snag", false);
@@ -63,6 +70,7 @@ public class SBConfig {
         public final ModConfigSpec.ConfigValue<Boolean> petHearts;
         public final ModConfigSpec.ConfigValue<Boolean> molt;
         public final ModConfigSpec.ConfigValue<Boolean> gleam;
+        public final ModConfigSpec.ConfigValue<Boolean> specializedParticles;
 
         public Client(ModConfigSpec.Builder builder) {
             builder.push("client");
@@ -72,6 +80,7 @@ public class SBConfig {
             gleam = builder.comment("Overbrushed animals gleam. A more domestic alternative to brush snags").translation("sage_brush.configuration.gleaming_mobs").define("Gleaming mobs", true);
             builder.pop();
             builder.push("block_interactions");
+            specializedParticles = builder.comment("Dust particle behaviors for brushes are altered at all").translation("sage_brush.configuration.specialized_particles").define("Specialized particles", true);
             reducedParticles = builder.comment("Certain blocks emit fewer particles when brushed").translation("sage_brush.configuration.reduced_dust").define("Reduced dust", true);
             gleamingParticles = builder.comment("Certain blocks emit gleam particles when brushed").translation("sage_brush.configuration.gleaming_blocks").define("Gleaming blocks", true);
             purePolish = builder.comment("Gleaming blocks do not emit dust particles when brushed").translation("sage_brush.configuration.pure_polish").define("Pure polish", false);

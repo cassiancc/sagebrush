@@ -42,8 +42,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-import static com.davigj.sage_brush.core.other.tags.SBEntityTypeTags.COSMETIC_BLACK_FEATHERS;
-import static com.davigj.sage_brush.core.other.tags.SBEntityTypeTags.COSMETIC_FEATHERED;
+import static com.davigj.sage_brush.core.other.tags.SBEntityTypeTags.*;
 import static net.minecraft.world.entity.projectile.ProjectileUtil.getEntityHitResult;
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.LAYERS;
 
@@ -113,6 +112,19 @@ public class SBBrushUtil {
                     armadillo.setData(SageBrush.SCUTE_TIMER, SBConfig.COMMON.scuteTimer.get());
                 }
             }
+            return;
+        }
+        if (SBConfig.COMMON.torScute.get() && (ModList.get().isLoaded("sullysmod") && SBConstants.isTortoise(victim))) {
+            if (level.isClientSide) {
+                entityParticleFX(level, victim, velocity, arm, new BlockParticleOption(ParticleTypes.BLOCK, Blocks.BROWN_CONCRETE.defaultBlockState()), 2, 4);
+            } else {
+                int timer = manager.getValue(victim, SageBrush.SCUTE_TIMER);
+                if (timer == 0) {
+                    victim.spawnAtLocation(SBConstants.tortoiseScute);
+                    damageItem(stack, player);
+                    manager.setValue(victim, SageBrush.SCUTE_TIMER, SBConfig.COMMON.torScuteTimer.get());
+                }
+            }
         }
     }
 
@@ -122,15 +134,15 @@ public class SBBrushUtil {
             particle = SBParticleTypes.PARROT_FEATHER.get();
         } else if (victim.getType().is(COSMETIC_BLACK_FEATHERS)) {
             particle = SBParticleTypes.BLACK_FEATHER.get();
-        } else if (SBConstants.isHummingbird(victim)) {
+        } else if (victim.getType().is(COSMETIC_HUMMINGBIRD_FEATHERS)) {
             particle = SBParticleTypes.HUMMINGBIRD_FEATHER.get();
-        } else if (SBConstants.isRoadrunner(victim)) {
+        } else if (victim.getType().is(COSMETIC_ROADRUNNER_FEATHERS)) {
             particle = SBParticleTypes.ROADRUNNER_FEATHER.get();
-        } else if (SBConstants.isEmu(victim)) {
+        } else if (victim.getType().is(COSMETIC_EMU_FEATHERS)) {
             particle = SBParticleTypes.EMU_FEATHER.get();
-        } else if (SBConstants.isShoebill(victim)) {
+        } else if (victim.getType().is(COSMETIC_SHOEBILL_FEATHERS)) {
             particle = SBParticleTypes.SHOEBILL_FEATHER.get();
-        } else if (SBConstants.isSunbird(victim)) {
+        } else if (victim.getType().is(COSMETIC_SUNBIRD_FEATHERS)) {
             particle = SBConstants.sunbirdParticle;
         }
         entityParticleFX(level, victim, velocity, arm, particle, 1, 3);
@@ -188,13 +200,19 @@ public class SBBrushUtil {
             return;
         }
         if (state.is(Blocks.SPORE_BLOSSOM)) {
-            blockParticleFX(level, hitResult, velocity, arm, ParticleTypes.SPORE_BLOSSOM_AIR, 2, 5);
+            blockParticleFX(level, hitResult, velocity, arm, SBParticleTypes.SPORE_BLOSSOM.get(), 2, 5);
             return;
         } else if (state.is(Blocks.END_ROD)) {
             blockParticleFX(level, hitResult, velocity, arm, ParticleTypes.END_ROD, 2, 5);
             return;
+        } else if (state.is(Blocks.CHERRY_LEAVES)) {
+            blockParticleFX(level, hitResult, velocity, arm, SBParticleTypes.CHERRY_BLOSSOM.get(), 2, 5);
+            return;
         } else if (ModList.get().isLoaded("supplementaries") && SBConstants.isFeatherBlock(state)) {
             blockParticleFX(level, hitResult, velocity, arm, SBParticleTypes.FEATHER.get(), 2, 5);
+            return;
+        } else if (ModList.get().isLoaded("atmospheric") && SBConstants.isYellowBlossom(state)) {
+            blockParticleFX(level, hitResult, velocity, arm, SBParticleTypes.YELLOW_BLOSSOM.get(), 2, 3);
             return;
         }
         if (SBConfig.COMMON.removable.get() && state.is(SBBlockTags.REMOVABLE)) {

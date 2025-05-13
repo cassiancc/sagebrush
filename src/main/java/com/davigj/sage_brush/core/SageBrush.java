@@ -19,7 +19,7 @@ import java.util.function.Supplier;
 
 @Mod(SageBrush.MOD_ID)
 public class SageBrush {
-    // TODO: docile tags, gleaming entities, IW sand, horsies and donkeys, offended animals
+    // TODO: docile tags, gleaming entities, IW sand, horsies and donkeys, offended animals, Sully's tortoises
     // TODO later: arts and crafts paintbrushes, domestication innovation pets, example mixin
     // TODO huge stretch goal: block particle jsons, entity particle jsons, entity resource jsons
     // TODO uncertain: brushes getting "gummed up" by things like cobwebs?...
