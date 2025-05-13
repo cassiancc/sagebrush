@@ -65,7 +65,7 @@ public abstract class BrushItemMixin extends Item {
                     level.playSound(player, player.blockPosition(), SoundEvents.BRUSH_GENERIC, SoundSource.PLAYERS);
                     Entity $$11 = ehr.getEntity();
                     HumanoidArm arm = player.getUsedItemHand() == InteractionHand.MAIN_HAND ? player.getMainArm() : player.getMainArm().getOpposite();
-                    Vec3 vec3 = living.getViewVector(0.0F);
+                    Vec3 vec3 = living.getViewVector(0.0F).scale(player.blockInteractionRange());
                     SBBrushUtil.onEntityUseTick(level, stack, $$11, living, vec3, arm);
                 }
                 ci.cancel();
@@ -84,7 +84,7 @@ public abstract class BrushItemMixin extends Item {
 
     @Inject(method = "calculateHitResult", at = @At("HEAD"), cancellable = true)
     private void hitEmBoys(Player living, CallbackInfoReturnable<HitResult> cir) {
-        Vec3 vec3 = living.getViewVector(0.0F);
+        Vec3 vec3 = living.getViewVector(0.0F).scale(living.blockInteractionRange());
         Level level = living.level();
         Vec3 vec31 = living.getEyePosition();
         Predicate<Entity> predicate = (entity) -> !entity.isSpectator() && entity.isPickable();
