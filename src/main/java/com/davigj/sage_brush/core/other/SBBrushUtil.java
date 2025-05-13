@@ -6,11 +6,10 @@ import com.davigj.sage_brush.core.other.tags.SBBlockTags;
 import com.davigj.sage_brush.core.other.tags.SBEntityTypeTags;
 import com.davigj.sage_brush.core.registry.SBParticleTypes;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.teamabnormals.blueprint.common.world.storage.tracking.TrackedData;
-import com.teamabnormals.blueprint.common.world.storage.tracking.TrackedDataManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
@@ -21,6 +20,7 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.Panda;
 import net.minecraft.world.entity.animal.Parrot;
 import net.minecraft.world.entity.animal.Turtle;
+import net.minecraft.world.entity.animal.armadillo.Armadillo;
 import net.minecraft.world.item.BrushItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -34,11 +34,13 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.fml.ModList;
+import net.neoforged.fml.ModList;
+import net.neoforged.neoforge.attachment.AttachmentType;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import static com.davigj.sage_brush.core.other.tags.SBEntityTypeTags.COSMETIC_BLACK_FEATHERS;
 import static com.davigj.sage_brush.core.other.tags.SBEntityTypeTags.COSMETIC_FEATHERED;
@@ -46,7 +48,6 @@ import static net.minecraft.world.entity.projectile.ProjectileUtil.getEntityHitR
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.LAYERS;
 
 public class SBBrushUtil {
-    public static final TrackedDataManager manager = TrackedDataManager.INSTANCE;
 
     public static void onEntityUseTick(Level level, ItemStack stack, Entity victim, LivingEntity player, Vec3 velocity, HumanoidArm arm) {
         if (victim instanceof TamableAnimal tamable && tamable.isOwnedBy(player)) {
@@ -93,11 +94,23 @@ public class SBBrushUtil {
             if (level.isClientSide) {
                 entityParticleFX(level, turtle, velocity, arm, new BlockParticleOption(ParticleTypes.BLOCK, Blocks.GREEN_CONCRETE.defaultBlockState()), 2, 4);
             } else {
-                int timer = manager.getValue(turtle, SageBrush.SCUTE_TIMER);
+                int timer = turtle.getData(SageBrush.SCUTE_TIMER);
                 if (timer == 0) {
-                    turtle.spawnAtLocation(Items.SCUTE);
+                    turtle.spawnAtLocation(Items.TURTLE_SCUTE);
                     damageItem(stack, player);
-                    manager.setValue(turtle, SageBrush.SCUTE_TIMER, SBConfig.COMMON.scuteTimer.get());
+                    turtle.setData(SageBrush.SCUTE_TIMER, SBConfig.COMMON.scuteTimer.get());
+                }
+            }
+        }
+        if (victim instanceof Armadillo armadillo) {
+            if (level.isClientSide) {
+                entityParticleFX(level, armadillo, velocity, arm, new BlockParticleOption(ParticleTypes.BLOCK, Blocks.PACKED_MUD.defaultBlockState()), 2, 4);
+            } else {
+                int timer = armadillo.getData(SageBrush.SCUTE_TIMER);
+                if (timer == 0) {
+                    armadillo.spawnAtLocation(Items.ARMADILLO_SCUTE);
+                    damageItem(stack, player);
+                    armadillo.setData(SageBrush.SCUTE_TIMER, SBConfig.COMMON.scuteTimer.get());
                 }
             }
         }
@@ -123,8 +136,8 @@ public class SBBrushUtil {
         entityParticleFX(level, victim, velocity, arm, particle, 1, 3);
     }
 
-    private static void pluck(ItemStack stack, LivingEntity player, Entity pluckee, TrackedData<Integer> timerData, int reset) {
-        int timer = manager.getValue(pluckee, timerData);
+    private static void pluck(ItemStack stack, LivingEntity player, Entity pluckee, Supplier<AttachmentType<Integer>> timerData, int reset) {
+        int timer = pluckee.getData(timerData);
         if (timer == 0) {
             ItemLike item = Items.FEATHER;
             if (ModList.get().isLoaded("alexsmobs")) {
@@ -136,7 +149,7 @@ public class SBBrushUtil {
             }
             pluckee.spawnAtLocation(item);
             damageItem(stack, player);
-            manager.setValue(pluckee, timerData, reset);
+            pluckee.setData(timerData, reset);
         }
     }
 
@@ -168,6 +181,7 @@ public class SBBrushUtil {
     public static void onBlockBrushTick(Level level, BlockHitResult hitResult, BlockState state, Vec3 velocity,
                                         HumanoidArm arm, BlockPos blockPos, Operation<Void> original, BrushItem instance,
                                         LivingEntity living, ItemStack stack) {
+        System.out.println("brush");
         if (letItShnope(level, state, blockPos)) {
             blockParticleFX(level, hitResult, velocity, arm, ParticleTypes.SNOWFLAKE, 10, 14);
             damageItem(stack, living);
@@ -231,10 +245,8 @@ public class SBBrushUtil {
     }
 
     private static void damageItem(ItemStack stack, LivingEntity entity) {
-        stack.hurtAndBreak(1, entity, (e) -> {
-            EquipmentSlot slot = stack.equals(entity.getItemBySlot(EquipmentSlot.OFFHAND)) ? EquipmentSlot.OFFHAND : EquipmentSlot.MAINHAND;
-            e.broadcastBreakEvent(slot);
-        });
+        stack.hurtAndBreak(1, entity,
+                stack.equals(entity.getItemBySlot(EquipmentSlot.OFFHAND)) ? EquipmentSlot.OFFHAND : EquipmentSlot.MAINHAND);
     }
 
 

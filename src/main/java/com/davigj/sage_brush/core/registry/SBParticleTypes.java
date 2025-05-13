@@ -5,27 +5,29 @@ import com.davigj.sage_brush.client.particle.GleamParticle;
 import com.davigj.sage_brush.core.SageBrush;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
-@Mod.EventBusSubscriber(modid = SageBrush.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+import java.util.function.Supplier;
+
+@EventBusSubscriber(modid = SageBrush.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class SBParticleTypes {
-    public static final DeferredRegister<ParticleType<?>> PARTICLE_TYPES = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, SageBrush.MOD_ID);
+    public static final DeferredRegister<ParticleType<?>> PARTICLE_TYPES = DeferredRegister.create(BuiltInRegistries.PARTICLE_TYPE, SageBrush.MOD_ID);
 
-    public static final RegistryObject<SimpleParticleType> GLEAM = PARTICLE_TYPES.register("gleam", () -> new SimpleParticleType(true));
-    public static final RegistryObject<SimpleParticleType> FEATHER = PARTICLE_TYPES.register("feather", () -> new SimpleParticleType(true));
-    public static final RegistryObject<SimpleParticleType> PARROT_FEATHER = PARTICLE_TYPES.register("parrot_feather", () -> new SimpleParticleType(true));
-    public static final RegistryObject<SimpleParticleType> BLACK_FEATHER = PARTICLE_TYPES.register("black_feather", () -> new SimpleParticleType(true));
-    public static final RegistryObject<SimpleParticleType> HUMMINGBIRD_FEATHER = PARTICLE_TYPES.register("hummingbird_feather", () -> new SimpleParticleType(true));
-    public static final RegistryObject<SimpleParticleType> ROADRUNNER_FEATHER = PARTICLE_TYPES.register("roadrunner_feather", () -> new SimpleParticleType(true));
-    public static final RegistryObject<SimpleParticleType> EMU_FEATHER = PARTICLE_TYPES.register("emu_feather", () -> new SimpleParticleType(true));
-    public static final RegistryObject<SimpleParticleType> SHOEBILL_FEATHER = PARTICLE_TYPES.register("shoebill_feather", () -> new SimpleParticleType(true));
+    public static final Supplier<SimpleParticleType> GLEAM = PARTICLE_TYPES.register("gleam", () -> new SimpleParticleType(true));
+    public static final Supplier<SimpleParticleType> FEATHER = PARTICLE_TYPES.register("feather", () -> new SimpleParticleType(true));
+    public static final Supplier<SimpleParticleType> PARROT_FEATHER = PARTICLE_TYPES.register("parrot_feather", () -> new SimpleParticleType(true));
+    public static final Supplier<SimpleParticleType> BLACK_FEATHER = PARTICLE_TYPES.register("black_feather", () -> new SimpleParticleType(true));
+    public static final Supplier<SimpleParticleType> HUMMINGBIRD_FEATHER = PARTICLE_TYPES.register("hummingbird_feather", () -> new SimpleParticleType(true));
+    public static final Supplier<SimpleParticleType> ROADRUNNER_FEATHER = PARTICLE_TYPES.register("roadrunner_feather", () -> new SimpleParticleType(true));
+    public static final Supplier<SimpleParticleType> EMU_FEATHER = PARTICLE_TYPES.register("emu_feather", () -> new SimpleParticleType(true));
+    public static final Supplier<SimpleParticleType> SHOEBILL_FEATHER = PARTICLE_TYPES.register("shoebill_feather", () -> new SimpleParticleType(true));
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void registerParticleFactories(RegisterParticleProvidersEvent event) {

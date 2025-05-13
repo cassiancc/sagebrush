@@ -11,7 +11,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.fml.ModList;
+import net.neoforged.fml.ModList;
 
 public class SBConstants {
     public static final Item emuFeather;
@@ -19,19 +19,24 @@ public class SBConstants {
     public static final ParticleOptions sunbirdParticle;
 
     public static boolean isEmu(Entity entity) {
-        return entity instanceof EntityEmu;
+        return false;
+//        return entity instanceof EntityEmu;
     }
     public static boolean isHummingbird(Entity entity) {
-        return entity instanceof EntityHummingbird;
+        return false;
+//        return entity instanceof EntityHummingbird;
     }
     public static boolean isSunbird(Entity entity) {
-        return entity instanceof EntitySunbird;
+        return false;
+//        return entity instanceof EntitySunbird;
     }
     public static boolean isRoadrunner(Entity entity) {
-        return entity instanceof EntityRoadrunner;
+        return false;
+//        return entity instanceof EntityRoadrunner;
     }
     public static boolean isShoebill(Entity entity) {
-        return entity instanceof EntityShoebill;
+        return false;
+//        return entity instanceof EntityShoebill;
     }
 
     public static boolean isFeatherBlock(BlockState state) {
@@ -39,8 +44,9 @@ public class SBConstants {
     }
 
     static {
-        emuFeather = ModList.get().isLoaded("alexsmobs") ? AMItemRegistry.EMU_FEATHER.get() : Items.FEATHER;
-        roadrunnerFeather = ModList.get().isLoaded("alexsmobs") ? AMItemRegistry.ROADRUNNER_FEATHER.get() : Items.FEATHER;
-        sunbirdParticle = ModList.get().isLoaded("alexsmobs") ? AMParticleRegistry.SUNBIRD_FEATHER.get() : SBParticleTypes.FEATHER.get();
+        // Alex's Mobs currently is not planning to move to 1.21.1.
+        emuFeather = Items.FEATHER;
+        roadrunnerFeather = Items.FEATHER;
+        sunbirdParticle = SBParticleTypes.FEATHER.get();
     }
 }

@@ -12,6 +12,6 @@ public class SBBlockTags {
     public static final TagKey<Block> REMOVABLE = blockTag("removable");
 
     private static TagKey<Block> blockTag(String name) {
-        return TagKey.create(Registries.BLOCK, new ResourceLocation(SageBrush.MOD_ID, name));
+        return TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(SageBrush.MOD_ID, name));
     }
 }
