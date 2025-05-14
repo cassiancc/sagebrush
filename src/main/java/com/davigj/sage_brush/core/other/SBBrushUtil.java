@@ -118,11 +118,11 @@ public class SBBrushUtil {
             if (level.isClientSide) {
                 entityParticleFX(level, victim, velocity, arm, new BlockParticleOption(ParticleTypes.BLOCK, Blocks.BROWN_CONCRETE.defaultBlockState()), 2, 4);
             } else {
-                int timer = manager.getValue(victim, SageBrush.SCUTE_TIMER);
+                int timer = victim.getData(SageBrush.SCUTE_TIMER);
                 if (timer == 0) {
                     victim.spawnAtLocation(SBConstants.tortoiseScute);
                     damageItem(stack, player);
-                    manager.setValue(victim, SageBrush.SCUTE_TIMER, SBConfig.COMMON.torScuteTimer.get());
+                    victim.setData(SageBrush.SCUTE_TIMER, SBConfig.COMMON.torScuteTimer.get());
                 }
             }
         }
@@ -193,7 +193,6 @@ public class SBBrushUtil {
     public static void onBlockBrushTick(Level level, BlockHitResult hitResult, BlockState state, Vec3 velocity,
                                         HumanoidArm arm, BlockPos blockPos, Operation<Void> original, BrushItem instance,
                                         LivingEntity living, ItemStack stack) {
-        System.out.println("brush");
         if (letItShnope(level, state, blockPos)) {
             blockParticleFX(level, hitResult, velocity, arm, ParticleTypes.SNOWFLAKE, 10, 14);
             damageItem(stack, living);

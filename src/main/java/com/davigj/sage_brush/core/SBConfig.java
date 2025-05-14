@@ -24,6 +24,7 @@ public class SBConfig {
         public final ModConfigSpec.ConfigValue<Boolean> torScute;
         public final ModConfigSpec.ConfigValue<Integer> torScuteTimer;
         public final ModConfigSpec.ConfigValue<Integer> torScuteBabyDrops;
+        public final ModConfigSpec.ConfigValue<Boolean> armadillos;
 
         Common (ModConfigSpec.Builder builder) {
             builder.push("common");

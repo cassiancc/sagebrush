@@ -18,10 +18,7 @@ import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
-import net.minecraft.world.level.block.entity.BedBlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.DecoratedPotBlockEntity;
+import net.minecraft.world.level.block.entity.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -39,7 +36,6 @@ import java.util.List;
 public class PaintbrushMixin extends Item {
     private static final int ANIMATION_DURATION = 10;
     private static final int USE_DURATION = 200;
-    private static final double MAX_BRUSH_DISTANCE = Math.sqrt(ServerGamePacketListenerImpl.MAX_INTERACTION_DISTANCE) - 1.0D;
 
     public PaintbrushMixin(Properties p_41383_) {
         super(p_41383_);
@@ -78,7 +74,7 @@ public class PaintbrushMixin extends Item {
 //                    this.spawnDustParticles(level, blockhitresult, blockState, player.getViewVector(0.0F), humanoidarm);
                     Block finalBlock = PaintbrushUtils.getFinalBlock(level.registryAccess(), blockState, itemStack);
                     if (finalBlock != null && finalBlock != blockState.getBlock()) {
-                        DecoratedPotBlockEntity.Decorations oldDecorations;
+                        PotDecorations oldDecorations;
                         if (blockEntity instanceof DyedDecoratedPotBlockEntity) {
                             DyedDecoratedPotBlockEntity dyedDecoratedPotBlockEntity = (DyedDecoratedPotBlockEntity) blockEntity;
                             oldDecorations = dyedDecoratedPotBlockEntity.getDecorations();
@@ -125,9 +121,9 @@ public class PaintbrushMixin extends Item {
         }
     }
 
-    public HitResult calculateHitResult(LivingEntity p_281264_) {
+    public HitResult calculateHitResult(Player p_281264_) {
         return ProjectileUtil.getHitResultOnViewVector(p_281264_, (p_281111_) -> {
             return !p_281111_.isSpectator() && p_281111_.isPickable();
-        }, MAX_BRUSH_DISTANCE);
+        }, p_281264_.entityInteractionRange());
     }
 }

@@ -9,8 +9,10 @@ import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.animal.Turtle;
 import net.minecraft.world.item.Items;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.attachment.AttachmentType;
+import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 
@@ -36,24 +38,23 @@ public class SBEvents {
         if (entity instanceof LivingEntity living) {
             if ((living instanceof Turtle && SBConfig.COMMON.scute.get()) ||
                     (SBConfig.COMMON.torScute.get() && (ModList.get().isLoaded("sullysmod") && SBConstants.isTortoise(living)))) {
-                TrackedDataManager.INSTANCE.setValue(entity, SageBrush.SCUTE_TIMER, living.getRandom().nextInt(SBConfig.COMMON.scuteTimer.get()));
+                entity.setData(SageBrush.SCUTE_TIMER, living.getRandom().nextInt(SBConfig.COMMON.scuteTimer.get()));
             }
         }
     }
 
     @SubscribeEvent
-    public static void entityTick(LivingEvent.LivingTickEvent event) {
-        TrackedDataManager manager = TrackedDataManager.INSTANCE;
-        LivingEntity target = event.getEntity();
-
-        if (target.getType().is(FEATHERED)) {
-            countDown(manager, target, SageBrush.FEATHER_TIMER);
-        } else if (target.getType().is(WORSE_FEATHERED)) {
-            countDown(manager, target, SageBrush.WORSE_FEATHER_TIMER);
-        }
-        if ((target instanceof Turtle && SBConfig.COMMON.scute.get()) ||
-                (ModList.get().isLoaded("sullysmod") && SBConstants.isTortoise(target) && SBConfig.COMMON.torScute.get())) {
-            countDown(manager, target, SageBrush.SCUTE_TIMER);
+    public static void entityTick(EntityTickEvent.Post event) {
+        if (event.getEntity() instanceof LivingEntity target) {
+            if (target.getType().is(FEATHERED)) {
+                countDown(target, SageBrush.FEATHER_TIMER);
+            } else if (target.getType().is(WORSE_FEATHERED)) {
+                countDown(target, SageBrush.WORSE_FEATHER_TIMER);
+            }
+            if ((target instanceof Turtle && SBConfig.COMMON.scute.get()) ||
+                    (ModList.get().isLoaded("sullysmod") && SBConstants.isTortoise(target) && SBConfig.COMMON.torScute.get())) {
+                countDown(target, SageBrush.SCUTE_TIMER);
+            }
         }
     }
 

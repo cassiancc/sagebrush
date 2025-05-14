@@ -11,10 +11,12 @@ import com.uraneptus.sullysmod.core.registry.SMItems;
 import net.mehvahdjukaar.supplementaries.reg.ModRegistry;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.DoublePlantBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.neoforged.fml.ModList;
 
 import static com.teamabnormals.atmospheric.common.block.AloeVeraTallBlock.AGE;
@@ -46,6 +48,10 @@ public class SBConstants {
 //        return entity instanceof EntityShoebill;
     }
 
+    public static boolean isTortoise(Entity entity) {
+        return false;
+    }
+
     public static boolean isFeatherBlock(BlockState state) {
         return state.is(ModRegistry.FEATHER_BLOCK.get());
     }
@@ -59,7 +65,7 @@ public class SBConstants {
         // Alex's Mobs currently is not planning to move to 1.21.1.
         emuFeather = Items.FEATHER;
         roadrunnerFeather = Items.FEATHER;
-        tortoiseScute = Items.SCUTE;
+        tortoiseScute = Items.TURTLE_SCUTE;
         sunbirdParticle = SBParticleTypes.FEATHER.get();
     }
 }
