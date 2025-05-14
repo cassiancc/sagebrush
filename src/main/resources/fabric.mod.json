@@ -1,0 +1,36 @@
+{
+	"schemaVersion": 1,
+	"id": "sage_brush",
+	"version": "${version}",
+	"name": "Sage Brush",
+	"description": "Wisens up brushes a bit.",
+	"authors": [
+		"DavigJ",
+		"casssiancc"
+	],
+	"contact": {
+		"homepage": "https://modrinth.com/mod/sage-brush",
+		"sources": "https://github.com/cassiancc/sagebrush",
+		"issues": "https://github.com/cassiancc/sagebrush/issues"
+	},
+	"license": "MIT",
+	"icon": "logo.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.davigj.sage_brush.core.SageBrush"
+		],
+		"client": [
+			"com.davigj.sage_brush.core.SageBrushClient"
+		]
+	},
+	"mixins": [
+		"sage_brush.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.16.14",
+		"minecraft": "~1.21.1",
+		"java": ">=21",
+		"fabric-api": "*"
+	}
+}

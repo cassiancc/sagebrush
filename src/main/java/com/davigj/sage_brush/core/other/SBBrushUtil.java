@@ -6,6 +6,8 @@ import com.davigj.sage_brush.core.other.tags.SBBlockTags;
 import com.davigj.sage_brush.core.other.tags.SBEntityTypeTags;
 import com.davigj.sage_brush.core.registry.SBParticleTypes;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import net.fabricmc.fabric.api.attachment.v1.AttachmentType;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -34,8 +36,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.fml.ModList;
-import net.neoforged.neoforge.attachment.AttachmentType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,11 +93,11 @@ public class SBBrushUtil {
             if (level.isClientSide) {
                 entityParticleFX(level, turtle, velocity, arm, new BlockParticleOption(ParticleTypes.BLOCK, Blocks.GREEN_CONCRETE.defaultBlockState()), 2, 4);
             } else {
-                int timer = turtle.getData(SageBrush.SCUTE_TIMER);
+                int timer = turtle.getAttachedOrElse(SageBrush.SCUTE_TIMER, 0);
                 if (timer == 0) {
                     turtle.spawnAtLocation(Items.TURTLE_SCUTE);
                     damageItem(stack, player);
-                    turtle.setData(SageBrush.SCUTE_TIMER, SBConfig.COMMON.scuteTimer.get());
+                    turtle.setAttached(SageBrush.SCUTE_TIMER, SBConfig.COMMON.scuteTimer.get());
                 }
             }
         }
@@ -105,24 +105,24 @@ public class SBBrushUtil {
             if (level.isClientSide) {
                 entityParticleFX(level, armadillo, velocity, arm, new BlockParticleOption(ParticleTypes.BLOCK, Blocks.PACKED_MUD.defaultBlockState()), 2, 4);
             } else {
-                int timer = armadillo.getData(SageBrush.SCUTE_TIMER);
+                int timer = armadillo.getAttachedOrElse(SageBrush.SCUTE_TIMER, 0);
                 if (timer == 0) {
                     armadillo.spawnAtLocation(Items.ARMADILLO_SCUTE);
                     damageItem(stack, player);
-                    armadillo.setData(SageBrush.SCUTE_TIMER, SBConfig.COMMON.scuteTimer.get());
+                    armadillo.setAttached(SageBrush.SCUTE_TIMER, SBConfig.COMMON.scuteTimer.get());
                 }
             }
             return;
         }
-        if (SBConfig.COMMON.torScute.get() && (ModList.get().isLoaded("sullysmod") && SBConstants.isTortoise(victim))) {
+        if (SBConfig.COMMON.torScute.get() && (FabricLoader.getInstance().isModLoaded("sullysmod") && SBConstants.isTortoise(victim))) {
             if (level.isClientSide) {
                 entityParticleFX(level, victim, velocity, arm, new BlockParticleOption(ParticleTypes.BLOCK, Blocks.BROWN_CONCRETE.defaultBlockState()), 2, 4);
             } else {
-                int timer = victim.getData(SageBrush.SCUTE_TIMER);
+                int timer = victim.getAttachedOrElse(SageBrush.SCUTE_TIMER, 0);
                 if (timer == 0) {
                     victim.spawnAtLocation(SBConstants.tortoiseScute);
                     damageItem(stack, player);
-                    victim.setData(SageBrush.SCUTE_TIMER, SBConfig.COMMON.torScuteTimer.get());
+                    victim.setAttached(SageBrush.SCUTE_TIMER, SBConfig.COMMON.torScuteTimer.get());
                 }
             }
         }
@@ -148,11 +148,11 @@ public class SBBrushUtil {
         entityParticleFX(level, victim, velocity, arm, particle, 1, 3);
     }
 
-    private static void pluck(ItemStack stack, LivingEntity player, Entity pluckee, Supplier<AttachmentType<Integer>> timerData, int reset) {
-        int timer = pluckee.getData(timerData);
+    private static void pluck(ItemStack stack, LivingEntity player, Entity pluckee, AttachmentType<Integer> timerData, int reset) {
+        int timer = pluckee.getAttachedOrElse(timerData, 0);
         if (timer == 0) {
             ItemLike item = Items.FEATHER;
-            if (ModList.get().isLoaded("alexsmobs")) {
+            if (FabricLoader.getInstance().isModLoaded("alexsmobs")) {
                 if (SBConstants.isEmu(pluckee)) {
                     item = SBConstants.emuFeather;
                 } else if (SBConstants.isRoadrunner(pluckee)) {
@@ -161,7 +161,7 @@ public class SBBrushUtil {
             }
             pluckee.spawnAtLocation(item);
             damageItem(stack, player);
-            pluckee.setData(timerData, reset);
+            pluckee.setAttached(timerData, reset);
         }
     }
 
@@ -207,10 +207,10 @@ public class SBBrushUtil {
         } else if (state.is(Blocks.CHERRY_LEAVES)) {
             blockParticleFX(level, hitResult, velocity, arm, SBParticleTypes.CHERRY_BLOSSOM.get(), 2, 5);
             return;
-        } else if (ModList.get().isLoaded("supplementaries") && SBConstants.isFeatherBlock(state)) {
+        } else if (FabricLoader.getInstance().isModLoaded("supplementaries") && SBConstants.isFeatherBlock(state)) {
             blockParticleFX(level, hitResult, velocity, arm, SBParticleTypes.FEATHER.get(), 2, 5);
             return;
-        } else if (ModList.get().isLoaded("atmospheric") && SBConstants.isYellowBlossom(state)) {
+        } else if (FabricLoader.getInstance().isModLoaded("atmospheric") && SBConstants.isYellowBlossom(state)) {
             blockParticleFX(level, hitResult, velocity, arm, SBParticleTypes.YELLOW_BLOSSOM.get(), 2, 3);
             return;
         }

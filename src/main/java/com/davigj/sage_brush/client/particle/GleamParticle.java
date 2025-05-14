@@ -1,10 +1,10 @@
 package com.davigj.sage_brush.client.particle;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
 import net.minecraft.core.particles.SimpleParticleType;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 
 public class GleamParticle extends SimpleAnimatedParticle {
     public GleamParticle(ClientLevel world, double x, double y, double z, SpriteSet sprites) {
@@ -24,7 +24,7 @@ public class GleamParticle extends SimpleAnimatedParticle {
         return 15728880;
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public static class Provider implements ParticleProvider<SimpleParticleType> {
         private final SpriteSet sprites;
 
