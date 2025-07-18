@@ -5,7 +5,7 @@ import com.davigj.sage_brush.core.registry.SBParticleTypes;
 import com.mojang.serialization.Codec;
 import dev.architectury.event.events.common.EntityEvent;
 import dev.architectury.event.events.common.InteractionEvent;
-import fuzs.forgeconfigapiport.fabric.api.neoforge.v4.NeoForgeConfigRegistry;
+import fuzs.forgeconfigapiport.fabric.api.v5.ConfigRegistry;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.attachment.v1.AttachmentRegistry;
 import net.fabricmc.fabric.api.attachment.v1.AttachmentType;
@@ -38,7 +38,7 @@ public class SageBrush implements ModInitializer {
         InteractionEvent.INTERACT_ENTITY.register(SBEvents::brushPets);
         EntityEvent.ADD.register(SBEvents::spawnTurts);
 
-        NeoForgeConfigRegistry.INSTANCE.register(MOD_ID, ModConfig.Type.COMMON, SBConfig.COMMON_SPEC);
-        NeoForgeConfigRegistry.INSTANCE.register(MOD_ID,ModConfig.Type.CLIENT, SBConfig.CLIENT_SPEC);
+        ConfigRegistry.INSTANCE.register(MOD_ID, ModConfig.Type.COMMON, SBConfig.COMMON_SPEC);
+        ConfigRegistry.INSTANCE.register(MOD_ID,ModConfig.Type.CLIENT, SBConfig.CLIENT_SPEC);
     }
 }

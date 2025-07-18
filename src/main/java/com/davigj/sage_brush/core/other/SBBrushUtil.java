@@ -14,6 +14,7 @@ import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -95,7 +96,7 @@ public class SBBrushUtil {
             } else {
                 int timer = turtle.getAttachedOrElse(SageBrush.SCUTE_TIMER, 0);
                 if (timer == 0) {
-                    turtle.spawnAtLocation(Items.TURTLE_SCUTE);
+                    turtle.spawnAtLocation((ServerLevel) level, Items.TURTLE_SCUTE);
                     damageItem(stack, player);
                     turtle.setAttached(SageBrush.SCUTE_TIMER, SBConfig.COMMON.scuteTimer.get());
                 }
@@ -107,7 +108,7 @@ public class SBBrushUtil {
             } else {
                 int timer = armadillo.getAttachedOrElse(SageBrush.SCUTE_TIMER, 0);
                 if (timer == 0) {
-                    armadillo.spawnAtLocation(Items.ARMADILLO_SCUTE);
+                    armadillo.spawnAtLocation((ServerLevel) level, Items.ARMADILLO_SCUTE);
                     damageItem(stack, player);
                     armadillo.setAttached(SageBrush.SCUTE_TIMER, SBConfig.COMMON.scuteTimer.get());
                 }
@@ -120,7 +121,7 @@ public class SBBrushUtil {
             } else {
                 int timer = victim.getAttachedOrElse(SageBrush.SCUTE_TIMER, 0);
                 if (timer == 0) {
-                    victim.spawnAtLocation(SBConstants.tortoiseScute);
+                    victim.spawnAtLocation((ServerLevel) level, SBConstants.tortoiseScute);
                     damageItem(stack, player);
                     victim.setAttached(SageBrush.SCUTE_TIMER, SBConfig.COMMON.torScuteTimer.get());
                 }
@@ -159,7 +160,8 @@ public class SBBrushUtil {
                     item = SBConstants.roadrunnerFeather;
                 }
             }
-            pluckee.spawnAtLocation(item);
+            if (pluckee.level() instanceof ServerLevel serverLevel)
+                pluckee.spawnAtLocation(serverLevel, item);
             damageItem(stack, player);
             pluckee.setAttached(timerData, reset);
         }
