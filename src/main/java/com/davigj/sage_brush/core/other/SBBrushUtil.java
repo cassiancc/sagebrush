@@ -275,7 +275,7 @@ public class SBBrushUtil {
         if (hitresult.getType() != HitResult.Type.MISS) {
             vec3 = hitresult.getLocation();
         }
-        HitResult hitresult1 = getEntityHitResult(level, viewer, eye, vec3, viewer.getBoundingBox().expandTowards(view).inflate(1.0), predicate);
+        HitResult hitresult1 = getEntityHitResult(viewer, eye, vec3, viewer.getBoundingBox().expandTowards(view).inflate(1.0), predicate, 0);
         if (hitresult1 != null) {
             hitresult = hitresult1;
         }
