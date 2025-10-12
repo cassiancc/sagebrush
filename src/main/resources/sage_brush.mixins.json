@@ -3,7 +3,6 @@
   "package": "com.davigj.sage_brush.core.mixin",
   "compatibilityLevel": "JAVA_17",
   "minVersion": "0.8",
-  "refmap": "sage_brush.refmap.json",
   "mixins": [
     "ArmadilloMixin",
     "BrushItemMixin",
